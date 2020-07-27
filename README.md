@@ -5,8 +5,6 @@
 
 1. Use *pkt2flow* to split raw PCAP files into flows
 2. Label the packets in each flow by running *nDPI* on each flow
-    Run:
-    > python3 ndpi.py SampleFlowPcaps/sample.pcap  
 3. Create `train.csv` and `test.csv` files containing packet-label pairs.
 
 ### 2) Deep Learning Models

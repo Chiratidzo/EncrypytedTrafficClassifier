@@ -257,10 +257,10 @@ def result(pcap_file=None, verbose=False):
                 label_detected = True
             else:
                 detected_label = "MULTIPLE LABELS"
-                print(f"ERROR: Multiple labels detected for {pcap_file}")
+                # print(f"ERROR: Multiple labels detected for {pcap_file}")
                 break
 
-    return pcap_file, detected_label
+    return detected_label
 
 
 def free(ndpi_struct):
