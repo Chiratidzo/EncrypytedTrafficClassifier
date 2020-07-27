@@ -227,21 +227,40 @@ def packetcaptured(pkt):
                                                                                           POINTER(c_uint8)))
 
 
-def result():
+def result(pcap_file=None, verbose=False):
     global flows_root_ref
     global ndpi_info_mod
-    print('\nnumber of analyzed packet: ' + str(packet_number))
-    print('number of flows: ' + str(flow_count))
+
+    if verbose:
+        print('\nnumber of analyzed packet: ' + str(packet_number))
+        print('number of flows: ' + str(flow_count))
 
     ndpi.ndpi_twalk(flows_root_ref.contents, guess_walker, None)
 
-    print('\nDetected protocols:')
+    if verbose:
+        print('\nDetected protocols:')
+
+    label_detected = False
+    detected_label = "NO LABEL"
+
     for i in range(0, ndpi.ndpi_get_num_supported_protocols(ndpi_info_mod)):
         if count_protocol[i] > 0:
-            print("{}: {} packets".format(
-                cast(ndpi.ndpi_get_proto_name(ndpi_info_mod, i),
-                     c_char_p).value.decode('utf-8'),
-                str(count_protocol[i])))
+
+            label = cast(ndpi.ndpi_get_proto_name(ndpi_info_mod, i),
+                         c_char_p).value.decode('utf-8')
+
+            if verbose:
+                print("{}: {} packets".format(label,
+                                              str(count_protocol[i])))
+            if not label_detected:
+                detected_label = label
+                label_detected = True
+            else:
+                detected_label = "MULTIPLE LABELS"
+                print(f"ERROR: Multiple labels detected for {pcap_file}")
+                break
+
+    return pcap_file, detected_label
 
 
 def free(ndpi_struct):
@@ -255,19 +274,49 @@ def initialize(ndpi_struct):
     ndpi.ndpi_set_protocol_detection_bitmask2(ndpi_struct, pointer(all))
 
 
-print('Using nDPI ' + cast(ndpi.ndpi_revision(), c_char_p).value.decode("utf-8"))
+def main():
+    print('Using nDPI ' + cast(ndpi.ndpi_revision(), c_char_p).value.decode("utf-8"))
 
-initialize(ndpi_info_mod)
+    initialize(ndpi_info_mod)
 
-if len(sys.argv) != 2:
-    print("\nUsage: ndpi_example.py <device>")
-    sys.exit(0)
+    if len(sys.argv) != 2:
+        print("\nUsage: ndpi_example.py <device>")
+        sys.exit(0)
 
-if "." in sys.argv[1]:
-    print('Reading pcap from file ' + sys.argv[1] + '...')
+    if "." in sys.argv[1]:
+        print('Reading pcap from file ' + sys.argv[1] + '...')
+        scapy_cap = None
+        try:
+            scapy_cap = rdpcap(sys.argv[1])
+        except FileNotFoundError:
+            print("\nFile not found")
+        except Scapy_Exception:
+            print("\nBad pcap")
+        else:
+            for packet in scapy_cap:
+                packetcaptured(packet)
+    else:
+        print('Capturing live traffic from device ' + sys.argv[1] + '...')
+        try:
+            sniff(iface=sys.argv[1], prn=packetcaptured)
+        except KeyboardInterrupt:
+            print('\nInterrupted\n')
+        except PermissionError:
+            sys.exit('\nRoot privilege required for live capture on interface: {}\n'.format(
+                sys.argv[1]))
+
+    result()
+    free(ndpi_info_mod)
+
+
+def get_labels(pcap_file):
+    """
+    Given a PCAP file, returns a list of strings of the labels 
+    """
+    initialize(ndpi_info_mod)
     scapy_cap = None
     try:
-        scapy_cap = rdpcap(sys.argv[1])
+        scapy_cap = rdpcap(pcap_file)
     except FileNotFoundError:
         print("\nFile not found")
     except Scapy_Exception:
@@ -275,20 +324,10 @@ if "." in sys.argv[1]:
     else:
         for packet in scapy_cap:
             packetcaptured(packet)
-else:
-    print('Capturing live traffic from device ' + sys.argv[1] + '...')
-    try:
-        sniff(iface=sys.argv[1], prn=packetcaptured)
-    except KeyboardInterrupt:
-        print('\nInterrupted\n')
-    except PermissionError:
-        sys.exit('\nRoot privilege required for live capture on interface: {}\n'.format(
-            sys.argv[1]))
-
-
-def main():
-    result()
+    labels = result(pcap_file)
     free(ndpi_info_mod)
+
+    return labels
 
 
 if __name__ == "__main__":
