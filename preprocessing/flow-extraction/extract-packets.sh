@@ -1,5 +1,5 @@
 #!/bin/bash
-FILES=data/SamplePcaps/*.pcap
+FILES=../data/SamplePcaps/*.pcap
 
 output_dir=$1
 
