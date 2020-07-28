@@ -3,3 +3,4 @@ __pycache__
 .sconsign.dblite
 pkt2flow
 *.o
+.DS_Store
