@@ -4,3 +4,4 @@ __pycache__
 pkt2flow
 *.o
 .DS_Store
+*checkpoint.ipynb
