@@ -5,3 +5,6 @@ pkt2flow
 *.o
 .DS_Store
 *checkpoint.ipynb
+LightsailDefaultKey-eu-central-1.pem
+preprocessing/data/data.csv
+data/
