@@ -43,7 +43,8 @@ def main():
 
                 # if the label has not been used yet initialize
                 if label not in labels_used:
-                    packets_per_label[label] = 0
+                    packets_per_label[label] = 1
+                    labels_used.append(label)
 
                 num_packets = split_line[2]
                 file_path = directory_path + file_path
