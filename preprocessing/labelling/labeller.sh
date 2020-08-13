@@ -1,13 +1,10 @@
 #!/bin/bash
 
-# For testing the script on 5 flow pcaps:
-# FLOW_FILES=../data/SampleFlowsSmall/*.pcap
-
-TCP_FLOW_FILES=../data/SampleFlows/tcp_syn/*.pcap
-UDP_FLOW_FILES=../data/SampleFlows/udp/*.pcap
+TCP_FLOW_FILES=./data/flows/tcp_syn/*.pcap
+UDP_FLOW_FILES=./data/flows/udp/*.pcap
 
 # Write the header row to the labels.csv file
-echo "FlowFilePath,LabelDetails" > labels.csv
+echo "FlowFilePath,LabelDetails" > data/labels.csv
 echo "Created labels.csv with header row"
 
 ###############################
@@ -18,19 +15,24 @@ echo "Labelling TCP flows..."
 
 # Loop through TCP_SYN flows folder, label each flow file using nDPI 
 # and append the filename-label pair to labels.csv
+
 tcp_file_counter=0
+udp_file_counter=0
+num_tcp_files=`ls $TCP_FLOW_FILES | wc -l | tr -d '[:space:]'` # for keeping track of progress
+num_udp_files=`ls $UDP_FLOW_FILES | wc -l | tr -d '[:space:]'` # for keeping track of progress
+
 for f in $TCP_FLOW_FILES
 do
      # Every 1000th file processed, print to console to track of progress
      ((tcp_file_counter=tcp_file_counter+1))
-     remainder=$(( tcp_file_counter % 1000 ))
+     remainder=$(( tcp_file_counter % 1 ))
      if [ $remainder -eq 0 ]
      then
-          echo Processing file \#$tcp_file_counter
+          echo "TCP: ($tcp_file_counter/$num_tcp_files), UDP: ($udp_file_counter/$num_udp_files)"
      fi
 
      # 1) Run nDPI on the file, $f, with output stored temporarily in nDPI_output.txt
-     ./nDPI/example/ndpiReader -i $f > nDPI_output.txt
+     ./labelling/nDPI/example/ndpiReader -i $f > nDPI_output.txt
 
      # 2) Extract the label and flow stats from the nDPI output
 
@@ -47,31 +49,30 @@ do
      flow_stats=`sed "${line_num}q;d" "nDPI_output.txt"`
 
      # 3) Append filename-label_stats pair to labels.csv
-     echo "${f}, ${flow_stats}" >> labels.csv 
+     echo "${f}, ${flow_stats}" >> data/labels.csv
 done
 
 
-# ###############################
-# ####### Label UDP Flows #######
-# ###############################
+###############################
+####### Label UDP Flows #######
+###############################
 
 echo "Labelling UDP flows..."
 
 # Loop through UDP flows folder, label each flow file using nDPI 
 # and append the filename-label pair to labels.csv
-udp_file_counter=0
 for f in $UDP_FLOW_FILES
 do
      # Every 1000th file processed, print to console to track of progress
      ((udp_file_counter=udp_file_counter+1))
-     remainder=$(( udp_file_counter % 1000 ))
+     remainder=$(( udp_file_counter % 1 ))
      if [ $remainder -eq 0 ]
      then
-          echo Processing file \#$udp_file_counter
+          echo "TCP: ($tcp_file_counter/$num_tcp_files), UDP: ($udp_file_counter/$num_udp_files)"
      fi
 
      # 1) Run nDPI on the file, $f, with output stored temporarily in nDPI_output.txt
-     ./nDPI/example/ndpiReader -i $f > nDPI_output.txt
+     ./labelling/nDPI/example/ndpiReader -i $f > nDPI_output.txt
 
      # 2) Extract the label and flow stats from the nDPI output
 
@@ -88,13 +89,18 @@ do
      flow_stats=`sed "${line_num}q;d" "nDPI_output.txt"`
 
      # 3) Append filename-label_stats pair to labels.csv
-     echo "${f}, ${flow_stats}" >> labels.csv 
+     echo "${f}, ${flow_stats}" >> data/labels.csv
 done
+
+
+###################################
+####### Clean up labels.csv #######
+###################################
 
 # Remove temporary nDPI_output.txt file
 rm nDPI_output.txt
 
 # Clean up labels.csv 
-python3 labels_csv_cleaning.py
+python3 labelling/labels_csv_cleaning.py
 
 
