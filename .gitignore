@@ -7,6 +7,8 @@ pkt2flow
 *checkpoint.ipynb
 LightsailDefaultKey-eu-central-1.pem
 preprocessing/data/data.csv
+preprocessing/data/labels.csv
 data/
 .vscode/
 preprocessing/labelling/nDPI/
+
