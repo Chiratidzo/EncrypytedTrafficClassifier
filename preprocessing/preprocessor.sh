@@ -12,7 +12,7 @@
 echo "------------------------------------------"
 echo "STEP 1 - Splitting raw pcaps into flows..."
 echo "------------------------------------------"
-# bash flow-splitting/flow-splitter.sh
+bash flow-splitting/flow-splitter.sh
 
 ##################################################
 ##### STEP 2 - Labelling                 #########
