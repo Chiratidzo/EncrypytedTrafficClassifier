@@ -11,5 +11,5 @@ for f in $RAW_PCAP_FILES
 do
      echo "Processing $f ($i/$num_files)"
      ((i=i+1))
-     flow-splitting/pkt2flow/pkt2flow -u -o  $f
+     flow-splitting/pkt2flow/pkt2flow -u -o $OUTPUT_DIR $f
 done
