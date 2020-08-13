@@ -19,8 +19,14 @@ The first stage of the project involves preprocessing the raw PCAP files into a 
     1. Install [pkt2flow](https://github.com/caesar0301/pkt2flow).
 
         ```bash
-        cd preprocessing/flow-extraction
+        cd preprocessing/flow-splitting
         git clone https://github.com/caesar0301/pkt2flow
+        ```
+
+        To compile pkt2flow:
+        ```bash
+        cd pkt2flow
+        scons
         ```
 
     2.  Run the `extract-packets` script.
@@ -39,7 +45,7 @@ The first stage of the project involves preprocessing the raw PCAP files into a 
         ```
         To compile nDPI:
         ```bash
-        cd ndpi/
+        cd nDPI/
         ./autogen.sh
         ./configure
         make
