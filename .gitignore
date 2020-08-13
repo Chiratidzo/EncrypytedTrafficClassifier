@@ -8,3 +8,4 @@ pkt2flow
 LightsailDefaultKey-eu-central-1.pem
 preprocessing/data/data.csv
 data/
+.vscode/
