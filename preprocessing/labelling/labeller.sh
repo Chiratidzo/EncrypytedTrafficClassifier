@@ -25,7 +25,7 @@ for f in $TCP_FLOW_FILES
 do
      # Every 1000th file processed, print to console to track of progress
      ((tcp_file_counter=tcp_file_counter+1))
-     remainder=$(( tcp_file_counter % 1 ))
+     remainder=$(( tcp_file_counter % 1000 ))
      if [ $remainder -eq 0 ]
      then
           echo "TCP: ($tcp_file_counter/$num_tcp_files), UDP: ($udp_file_counter/$num_udp_files)"
@@ -65,7 +65,7 @@ for f in $UDP_FLOW_FILES
 do
      # Every 1000th file processed, print to console to track of progress
      ((udp_file_counter=udp_file_counter+1))
-     remainder=$(( udp_file_counter % 1 ))
+     remainder=$(( udp_file_counter % 1000 ))
      if [ $remainder -eq 0 ]
      then
           echo "TCP: ($tcp_file_counter/$num_tcp_files), UDP: ($udp_file_counter/$num_udp_files)"
