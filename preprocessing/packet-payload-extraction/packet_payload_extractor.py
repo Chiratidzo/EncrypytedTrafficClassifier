@@ -2,7 +2,6 @@ import os
 from scapy.all import *
 import time
 
-
 def main():
 
     # dictionary with the number of packets per label
@@ -107,26 +106,24 @@ def label_packets(file_path, label, f_write, packets_per_label):
         packets_per_flow = 10000
         count_packets_per_flow = 0
         if os.path.exists(file_path):
-            data = rdpcap(file_path)
+            data = sniff(offline=file_path)
             #print('Read {}'.format(file_path))
-            sessions = data.sessions()
-            for session in sessions:
-                for pkt in sessions[session]:
-                    if count_packets_per_flow <= packets_per_flow:
-                        if pkt.haslayer(IP) and pkt.haslayer(Raw):
-                            hex_data = linehexdump(
-                                pkt[IP].payload, onlyhex=1, dump=True).split(" ")
-                            decimal_data = list(map(hex_to_dec, hex_data))
-                            # print(decimal_data)
-                            f_write.write(label+','+','.join(decimal_data))
-                            f_write.write('\n')
+            for pkt in data:
+                if count_packets_per_flow <= packets_per_flow:
+                    if pkt.haslayer(IP) and pkt.haslayer(Raw):
+                        hex_data = linehexdump(
+                            pkt[IP].payload, onlyhex=1, dump=True).split(" ")
+                        decimal_data = list(map(hex_to_dec, hex_data))
+                        # print(decimal_data)
+                        f_write.write(label+','+','.join(decimal_data))
+                        f_write.write('\n')
 
-                            packets_per_label[label] += 1
-                        else:
-                            continue
+                        packets_per_label[label] += 1
                     else:
-                        break
-                    count_packets_per_flow += 1
+                        continue
+                else:
+                    break
+                count_packets_per_flow += 1
 
         else:
             print('Could not find {}'.format(file_path))
