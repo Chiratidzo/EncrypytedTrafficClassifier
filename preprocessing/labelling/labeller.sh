@@ -18,8 +18,8 @@ echo "Labelling TCP flows..."
 
 tcp_file_counter=0
 udp_file_counter=0
-num_tcp_files=`ls $TCP_FLOW_FILES | wc -l | tr -d '[:space:]'` # for keeping track of progress
-num_udp_files=`ls $UDP_FLOW_FILES | wc -l | tr -d '[:space:]'` # for keeping track of progress
+num_tcp_files=`find $TCP_FLOW_FILES -type f | wc -l | tr -d '[:space:]'` # for keeping track of progress
+num_udp_files=`find $TCP_FLOW_FILES -type f | wc -l | tr -d '[:space:]'` # for keeping track of progress
 
 for f in $TCP_FLOW_FILES
 do
