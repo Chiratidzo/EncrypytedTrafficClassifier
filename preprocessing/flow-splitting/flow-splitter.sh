@@ -1,7 +1,7 @@
 #!/bin/bash
 
 RAW_PCAP_FILES=./data/raw_pcaps/*.pcap
-OUTPUT_DIR=./data/flows/
+OUTPUT_DIR=./data/flows
 
 mkdir $OUTPUT_DIR # create flows directory
 
@@ -13,3 +13,5 @@ do
      ((i=i+1))
      flow-splitting/pkt2flow/pkt2flow -u -o $OUTPUT_DIR $f
 done
+
+echo "Finished splitting packets into flows"
