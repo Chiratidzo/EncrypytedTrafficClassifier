@@ -20,7 +20,7 @@ tcp_file_counter=0
 udp_file_counter=0
 num_tcp_files=`find ./data/flows/tcp_syn -maxdepth 1 -type f |  wc -l | tr -d '[:space:]'` # for keeping track of progress
 num_udp_files=`find ./data/flows/udp -maxdepth 1 -type f | wc -l | tr -d '[:space:]'` # for keeping track of progress
-echo "Labelling Log" > labelling_log.txt # log file
+echo "Labelling Log" > labels/labelling_log.txt # log file
 
 for f in $TCP_FLOW_FILES
 do
