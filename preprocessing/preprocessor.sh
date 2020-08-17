@@ -37,3 +37,15 @@ echo "-----------------------------------------------"
 echo "STEP 3 - Extracting packet payloads to data.csv"
 echo "-----------------------------------------------"
 python3 packet-payload-extraction/packet_payload_extractor.py
+
+#################################################################
+##### STEP 4 - Create train, val, and test csv files     ########
+#################################################################
+
+# Input: `preprocessing/data/data.csv` 
+# Output: `DLOGs/data/[num_classes]_[num_packets_per_class]/(train|val|test)_[num_classes]_[num_packets_per_class].csv` files 
+
+echo "------------------------------------------------"
+echo "STEP 4 - Creating train, val, and test csv files"
+echo "------------------------------------------------"
+python3 train-val-test-data-construction/train-val-test-splitter.py
