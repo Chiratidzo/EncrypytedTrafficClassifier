@@ -11,7 +11,7 @@ def main():
     labels_used = []
 
     # setting the labels that we want to exclude
-    excluded_labels = ['HTTP', 'SSDP', 'Unknown', 'TLS', 'HTTP_Proxy']
+    excluded_labels = ['HTTP', 'SSDP', 'Unknown', 'TLS', 'HTTP_Proxy', 'DNS']
 
     # set the file path
     cwd = os.getcwd()
