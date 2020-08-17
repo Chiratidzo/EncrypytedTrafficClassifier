@@ -1,3 +1,0 @@
-FlowFilePath,LabelDetails
-./data/flows/tcp_syn/*.pcap, 
-./data/flows/udp/*.pcap, 
