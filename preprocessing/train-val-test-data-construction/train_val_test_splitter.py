@@ -3,10 +3,11 @@ import matplotlib.pyplot as plt
 import sklearn
 from sklearn.model_selection import train_test_split
 import logging
+import os
 
 
-CLASSES = ["YouTube", "Facebook", "WhatsApp"]
-PACKETS_PER_CLASS = 10000
+CLASSES = ["YouTube", "Facebook", "WhatsApp", "Microsoft", "Amazon", "Google"]
+PACKETS_PER_CLASS = 5000
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s  %(message)s',
@@ -16,7 +17,7 @@ logger = logging.getLogger("logger")
 # Read in the csv with byte_array - label pairs
 logger.info(
     "Reading in the csv with all packets - will take approximately 2 minutes...")
-df = pd.read_csv('../data/data.csv')
+df = pd.read_csv('./data/data.csv')
 logger.info("Reading csv complete")
 
 # Sample PACKETS_PER_CLASS packets from each class in CLASSES and add to df_new
@@ -43,13 +44,18 @@ logger.info("Writing to csv's")
 
 file_suffix = "{0}_{1}".format(len(CLASSES), PACKETS_PER_CLASS)  # e.g. 3_10000
 
+try:
+    os.mkdir("./../data/{0}/".format(file_suffix))
+except OSError as error:
+    print(error)
+
 df_train.to_csv(
-    "../../data/{0}/train_{0}.csv".format(file_suffix), index=False)
+    "./../data/{0}/train_{0}.csv".format(file_suffix), index=False)
 logger.info("train_{0}.csv created".format(file_suffix))
 
 df_val.to_csv(
-    "../../data/{0}/val_{0}.csv".format(file_suffix), index=False)
+    "./../data/{0}/val_{0}.csv".format(file_suffix), index=False)
 logger.info("val_{0}.csv created".format(file_suffix))
 
-df_test.to_csv("../../data/{0}/test_{0}.csv".format(file_suffix), index=False)
+df_test.to_csv("./../data/{0}/test_{0}.csv".format(file_suffix), index=False)
 logger.info("test_{0}.csv created".format(file_suffix))
