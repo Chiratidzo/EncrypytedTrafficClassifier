@@ -20,6 +20,7 @@ tcp_file_counter=0
 udp_file_counter=0
 num_tcp_files=`find ./data/flows/tcp_syn -maxdepth 1 -type f |  wc -l | tr -d '[:space:]'` # for keeping track of progress
 num_udp_files=`find ./data/flows/udp -maxdepth 1 -type f | wc -l | tr -d '[:space:]'` # for keeping track of progress
+echo "Labelling Log" > labelling_log.txt # log file
 
 for f in $TCP_FLOW_FILES
 do
@@ -28,7 +29,7 @@ do
      remainder=$(( tcp_file_counter % 1000 ))
      if [ $remainder -eq 0 ]
      then
-          echo "TCP: ($tcp_file_counter/$num_tcp_files), UDP: ($udp_file_counter/$num_udp_files)"
+          echo "`date` - TCP: ($tcp_file_counter/$num_tcp_files), UDP: ($udp_file_counter/$num_udp_files)" >> labels/labelling_log.txt
      fi
 
      # 1) Run nDPI on the file, $f, with output stored temporarily in nDPI_output.txt
@@ -68,7 +69,7 @@ do
      remainder=$(( udp_file_counter % 1000 ))
      if [ $remainder -eq 0 ]
      then
-          echo "TCP: ($tcp_file_counter/$num_tcp_files), UDP: ($udp_file_counter/$num_udp_files)"
+          echo "`date` - TCP: ($tcp_file_counter/$num_tcp_files), UDP: ($udp_file_counter/$num_udp_files)" >> labels/labelling_log.txt
      fi
 
      # 1) Run nDPI on the file, $f, with output stored temporarily in nDPI_output.txt
