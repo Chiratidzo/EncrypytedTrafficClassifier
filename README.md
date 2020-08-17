@@ -39,10 +39,30 @@ bash preprocessor.sh
         sudo apt install -y libpcap-dev
         ```
 
-        - The SCons sofware construction tool:
+        - The `scons` sofware construction tool:
 
         ```bash
         sudo apt install -y scons
+        ```
+
+        - GNU tools (`autogen`, `automake`, `autoconf`, `libtool`)
+        ```bash
+        sudo apt install autogen automake autoconf libtool
+        ```
+
+        - GNU C compiler (`gcc`)
+        ```bash
+        sudo apt install gcc
+        ```
+
+        - `make` build automation tool:
+        ```bash
+        sudo apt install make
+        ```
+
+        - `pkg-config` library:
+        ```bash
+        sudo apt-get install pkg-config
         ```
 
         Assumption:
@@ -70,12 +90,7 @@ bash preprocessor.sh
 
 2. Label the packets in each flow by running *nDPI* on each flow.
 
-    1. Prerequisites:
-
-        - GNU tools (autogen, automake, autoconf, libtool)
-        - GNU C compiler (gcc)
-
-    2. Install [ndpi](https://github.com/ntop/nDPI) in the `labelling` directory, and follow the instructions for compilation.
+    1. Install [ndpi](https://github.com/ntop/nDPI) in the `labelling` directory, and follow the instructions for compilation.
 
         ```bash
         cd preprocessing/labelling/
