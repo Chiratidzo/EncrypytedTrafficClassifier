@@ -47,7 +47,7 @@ def main():
                     count += 1
                     continue
 
-                split_line = line.split(',')
+                split_line = line.strip().split(',')
 
                 # get the file path, labels and num packets from csv
                 file_path = split_line[0]
@@ -58,7 +58,6 @@ def main():
                     packets_per_label[label] = 1
                     labels_used.append(label)
 
-                num_packets = split_line[2]
                 file_path = directory_path + file_path
 
                 # process the pcap file

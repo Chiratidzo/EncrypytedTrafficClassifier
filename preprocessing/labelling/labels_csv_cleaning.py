@@ -17,15 +17,6 @@ df["Label"] = df["LabelDetails"].apply(
     lambda label_details: get_label(label_details))
 
 
-def get_num_packets(label_details):
-    label_details = label_details[label_details.find(
-        "packets: ")+len("packets: "):]
-    return int(label_details[:label_details.find(' ')])
-
-
-df["NumPackets"] = df["LabelDetails"].apply(
-    lambda label_details: get_num_packets(label_details))
-
 df.drop(['LabelDetails', 'FlowFilePath'], axis=1, inplace=True)
 
 print("Writing cleaned up labels.csv to file")
