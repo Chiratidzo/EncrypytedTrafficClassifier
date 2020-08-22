@@ -29,43 +29,48 @@ bash preprocessor.sh
 
 ##### Step-by-step details for the preprocessing process:
 
+Prerequisite installs:
+
+- The `libpcap` library:
+
+```bash
+sudo apt install -y libpcap-dev
+```
+
+- The `scons` sofware construction tool:
+
+```bash
+sudo apt install -y scons
+```
+
+- GNU tools (`autogen`, `automake`, `autoconf`, `libtool`)
+```bash
+sudo apt install autogen automake autoconf libtool
+```
+
+- GNU C compiler (`gcc`)
+```bash
+sudo apt install gcc
+```
+
+- `make` build automation tool:
+```bash
+sudo apt install make
+```
+
+- `pkg-config` library:
+```bash
+sudo apt-get install pkg-config
+```
+
+- Python libraries - `numpy`, `pandas`, `matplotlib`, `sklearn`, `scapy`:
+```bash
+pip3 install numpy pandas matplotlib sklearn scapy
+```
+
 1. Use *pkt2flow* to split raw PCAP files into flows
 
-    1. Prerequisite installs:
-
-        - The `libpcap` library:
-        
-        ```bash
-        sudo apt install -y libpcap-dev
-        ```
-
-        - The `scons` sofware construction tool:
-
-        ```bash
-        sudo apt install -y scons
-        ```
-
-        - GNU tools (`autogen`, `automake`, `autoconf`, `libtool`)
-        ```bash
-        sudo apt install autogen automake autoconf libtool
-        ```
-
-        - GNU C compiler (`gcc`)
-        ```bash
-        sudo apt install gcc
-        ```
-
-        - `make` build automation tool:
-        ```bash
-        sudo apt install make
-        ```
-
-        - `pkg-config` library:
-        ```bash
-        sudo apt-get install pkg-config
-        ```
-
-        Assumption:
+    1. Assumption:
 
         The data to be used (PCAP files) is stored in the `preprocessing/data/raw_pcaps` directory.
 
