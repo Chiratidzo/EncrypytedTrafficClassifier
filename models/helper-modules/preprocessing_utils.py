@@ -5,8 +5,8 @@ from tensorflow.keras.utils import to_categorical
 from math import sqrt
 
 
-DEFAULT_FILE_SUFFIX = "10_10000"  # Dataset with 10 classes, 10000 packets in each
-DEFAULT_DATA_PATH = f"../../data/{DEFAULT_FILE_SUFFIX}"
+DEFAULT_FILE_SUFFIX = "14_10000"  # Dataset with 10 classes, 10000 packets in each
+DEFAULT_DATA_PATH = f"/Users/chiratidzomatowe/DLOGs/preprocessing/data/{DEFAULT_FILE_SUFFIX}"
 MAX_BYTE_VALUE = 255
 
 
@@ -40,6 +40,10 @@ def preprocess(model_str, df_train, df_test, df_val):
         y_train is of shape (m, k, 1) (m training examples, one hot-encoded label with k classes)
 
     Else if model_str contains "CNN":
+        X_train is of shape (m, 40, 37, 1) (m training examples, which are 40 x 37 byte images)
+        y_train is of shape (m, k) (m training examples, one hot-encoded label with k classes)
+
+    Else if model_str contains "Resnet":
         X_train is of shape (m, 40, 37, 1) (m training examples, which are 40 x 37 byte images)
         y_train is of shape (m, k) (m training examples, one hot-encoded label with k classes)
 
@@ -80,13 +84,23 @@ def preprocess(model_str, df_train, df_test, df_val):
         X_val = X_val.reshape(X_val.shape[0], 40, 37, 1)
         X_test = X_test.reshape(X_test.shape[0], 40, 37, 1)
 
+    if "Resnet" in model_str:
+        X_train = X_train.reshape(X_train.shape[0], 40, 37, 1)
+        X_val = X_val.reshape(X_val.shape[0], 40, 37, 1)
+        X_test = X_test.reshape(X_test.shape[0], 40, 37, 1)
+        
+    if "SAE" in model_str:
+        X_train = X_train.reshape(X_train.shape[0], 40, 37, 1)
+        X_val = X_val.reshape(X_val.shape[0], 40, 37, 1)
+        X_test = X_test.reshape(X_test.shape[0], 40, 37, 1)
+
     # 6) Encode labels as integers
     y_train = y_train.astype('category').cat.codes.values
     y_val = y_val.astype('category').cat.codes.values
     y_test = y_test.astype('category').cat.codes.values
 
     # 7) One hot encode for CNNs and MLPs
-    if "CNN" in model_str or "MLP" in model_str:
+    if "Resnet" in model_str or "SAE" in model_str or "CNN" in model_str or "MLP" in model_str:
         y_train = to_categorical(y_train)
         y_val = to_categorical(y_val)
         y_test = to_categorical(y_test)
@@ -203,12 +217,16 @@ def preprocess_test(model_str, df_test):
     # 5) Reshape the data for CNN
     if "CNN" in model_str:
         X_test = X_test.reshape(X_test.shape[0], 40, 37, 1)
+    if "Resnet" in model_str:
+        X_test = X_test.reshape(X_test.shape[0], 40, 37, 1)
+    if "SAE" in model_str:
+        X_test = X_test.reshape(X_test.shape[0], 40, 37, 1)
 
     # 6) Encode labels as integers
     y_test = y_test.astype('category').cat.codes.values
 
     # 7) One hot encode
-    if "CNN" in model_str or "MLP" in model_str:
+    if "Resnet" in model_str or "SAE" in model_str or "CNN" in model_str or "MLP" in model_str:
         y_test = to_categorical(y_test)
 
     return (X_test, y_test)
